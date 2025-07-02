@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hold Shift to Check Multiple Checkboxes</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <style>
+
+    html {
+      font-family: sans-serif;
+      background: #ffc600;
+    }
+
+    .inbox {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #F1F1F1;
+    }
+
+    .item:last-child {
+      border-bottom: 0;
+    }
+
+    input:checked + p {
+      background: #F9F9F9;
+      text-decoration: line-through;
+    }
+
+    input[type="checkbox"] {
+      margin: 20px;
+    }
+
+    p {
+      margin: 0;
+      padding: 20px;
+      transition: background 0.2s;
+      flex: 1;
+      font-family:'helvetica neue';
+      font-size: 20px;
+      font-weight: 200;
+      border-left: 1px solid #D1E2FF;
+    }
+  </style>
+   <!--
+   The following is a common layout you would see in an email client.
+
+   When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
+
+  -->
+  <div class="inbox">
+    <div class="item">
+      <input type="checkbox">
+      <p>This is an inbox layout.</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check one item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Hold down your Shift key</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Check a lower item</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Everything in between should also be set to checked</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Try to do it without any libraries</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Just regular JavaScript</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Good Luck!</p>
+    </div>
+    <div class="item">
+      <input type="checkbox">
+      <p>Don't forget to tweet your result!</p>
+    </div>
+  </div>
+
+<script>
+  // ok this is my personal attempt with out the video per the creator's recommendation.
+
+  // I first have to check for mouse clicks... but I feel like there's a method for check box that's specific... let try this in a browser.
+  // ok upon trying this in a browser, clicking each check box checks the item off, which means something about check box is already implemented
+  // all I have to do is check if shift is held down and go through each itme and find out if it's between the two items and mark it as complete
+
+  // ok upong examining the console further it is not breaking on attribute modification which indicates that the check box is not modifying attributes.
+
+  // let's start by selecting all of the elemts which are of 'item' class.
+
+  const items = [...document.querySelectorAll('.inbox input[type="checkbox"]')];
+  // let's add an event listener
+  // OK i am able to successfully console log when check box is clicked, now I have to figure out how to checkbox someting else
+
+  // Ok I can't seem to figure out how to change the check box status without outside help...  I will not watch the video yet...
+  // I feel like the rest of the code should be fairly trivial so I'm going to finish that, then I will
+  // look up how to toggle check boxes. For now though, I will implement other parts of the code
+
+  // looking at resources to find how to check the checkbox:
+  // https://www.w3schools.com/jsref/prop_checkbox_checked.asp
+  // looking at this it should be a simple as .checked = true;
+  // second resource: https://stackoverflow.com/questions/8206565/check-uncheck-checkbox-with-javascript
+  // ok i will look at the finished code before watching the video just to see if i can figure it out
+  // after looking at the code... I realize I am selecting the wrong elements in the document...
+  // I was selecting the '.item' class when I should've selected '.inbox input[type="checkbox"]'
+  // my code works, although his approach is much neater... I just use too many if statements
+  // he has a bool that toggles to when ever it reaches prevIndex and this index... so nice! 
+
+  let shiftIsHeld = false;
+  let prevIndex = -1;
+
+  function myEvent(e){
+    const currIdx = items.indexOf(this); 
+    if(shiftIsHeld === true){
+      if(prevIndex >= 0){
+        if(prevIndex < currIdx){
+        items.forEach(item => {
+          const idx = items.indexOf(item)
+          if(idx > prevIndex && idx < currIdx){
+
+            // after looking at finished code
+            item.checked = true;
+          }
+        });
+      }
+      else{
+        items.forEach(item => {
+          const idx = items.indexOf(item)
+          if(idx < prevIndex && idx > currIdx){
+            // after looking at finished code
+            item.checked = true;
+          }
+        });
+      }
+      }
+      else{
+        prevIndex = currIdx;
+      }
+    }
+    else{
+      prevIndex = -1;
+    }
+    return;
+  }
+  
+  items.forEach(item => {item.addEventListener('input', myEvent);});
+
+
+  // pressing both shifts is causing collisions so I will have different functions for up and down
+  // rather than just toggle
+  function shiftTrue(e){
+    if(e.keyCode === 16){
+      shiftIsHeld = true;
+    }
+  }
+  function shiftFalse(e){
+    if(e.keyCode === 16){
+      shiftIsHeld = false;
+    }
+  }
+  document.addEventListener('keydown', shiftTrue);
+  document.addEventListener('keyup', shiftFalse);
+
+  // ok my code works! looking at the finished code he has a much neater approach. But this WORKS!!!
+  
+  
+
+</script>
+</body>
+</html>
