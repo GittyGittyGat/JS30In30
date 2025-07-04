@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <p style="color:red;">Type "test" see what happens!</p>
+    <script type="text/javascript" src="./cornify.js"></script>
+    <link rel="icon" href="https://fav.farm/🔥" />
+  </head>
+  <body>
+    <script>
+      const pressedArray = [];
+      const sequence = 'test';
+      window.addEventListener('keyup', (e) => {
+        pressedArray.push(e.key);
+        pressedArray.splice(-sequence.length - 1, pressedArray.length - sequence.length);
+        if(pressedArray.join('').includes(sequence)){
+          console.log('sequence found!!!');
+          cornify_add();
+        }
+      });
+    </script>
+  </body>
+</html>
